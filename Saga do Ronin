@@ -1,0 +1,140 @@
+#Criando GamePlay com Python – Saga do Ronin
+#Começando a estrutura de código abrangente para o seu jogo “Saga do Ronin”, cobrindo vários estágios, inimigos, movimentos de artes marciais e um ataque especial baseado em energia. ]
+#Será um jogo baseado em Python para Android com login do Google e uma estética estilo adesivo, descreverei os componentes necessários e fornecerei alguns trechos de código começar.
+
+#Estrutura do Jogo
+
+#Ciclo principal do jogo
+#Inicialize o mecanismo do jogo, carregue os ativos e configure os estados do jogo
+#Lidar com a entrada do usuário, atualizar a lógica do jogo e renderizar gráficos
+#Estados do jogo
+#Estado do menu: exibe o título do jogo, opções e botão de login do Google
+#Estado de jogo: controle o movimento do jogador, a IA inimiga e a mecânica de combate
+#Estado de pausa: exibe o menu de pausa com opções para retomar ou sair
+#Personagem do Jogador (Ronin)
+#Atributos: Movimentos de saúde, energia e artes marciais (por exemplo, socos, chutes, cortes) logica de manuseio ao jogo, Jostick a esquerda da tela, durante todas as 39 fases tera tres botoes 1 chute, 2  golpe de espada e , 3 golte conjunto chute soco mais corte fatal com espada a direita em diagonal, apos a fase 40 a final 49 surgira um novo botao, o 4 para o ataque especial dragao sai da espada em forma de dragao de agua potente
+#Movimento Especial: Ataque baseado em energia com animação e efeito únicos
+#Inimigos 
+#Atributos: Saúde, poder de ataque e movimentos de artes marciais
+#Tipos: Vários inimigos com diferentes atributos e movimentos (por exemplo, ninja, bandido, guerreiro, gangsters, cachorros)
+#Estágios 49 + 1 final com mestre dragao. Ao completar com um mestre Dragao  que gospe fogo a cada 3 ataques voadores em ataque ao Ronin, que tera poder final de acordo com bonus que foram acumulados no decorrer do jogo, proviniente de sua armadura estando completa que sera possivel adquirir apos a fase 39 com uma espada magica que tera um golpe fulminante em formato de dragao de agua.   
+#Locais: Montanhas, Selvas, Desertos, Cidades de (Brasil, Japão, EUA, Rússia, Espanha, Argentina, Turquia, México, Canadá, Itália, El Salvador, China, Israel, Egito)
+#Layout do palco: definir a geometria do palco, obstáculos e pontos de aparecimento do inimigo
+#Login do Google
+#Autenticação: use o Google Play Services para autenticar usuários e armazenar o progresso do jogo
+#Estrutura de código
+
+#Baseado em Python para Android, será utilizado as seguintes bibliotecas e frameworks:
+
+#ivy: uma biblioteca Python multiplataforma para criar aplicativos multitoque
+#Buildozer: um pacote Python para criar aplicativos Android a partir de projetos Kivy
+#Google Play Services: para login e autenticação do Google
+#Está é uma estrutura inicial de código para começar:
+#Inicio do código
+
+# main.py (Aplicativo Kivy)
+import kivy
+from kivy.app import App
+from kivy.uix.label import Label
+from kivy.uix.button import Button
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.screenmanager import ScreenManager, Screen
+
+class SagaDoRonin(App):
+    def build(self):
+        # Inicializar motor de jogo e carregar assets
+        self.motor_de_jogo = MotorDeJogo()
+        self.carregar_assets()
+
+        # Criar gerenciador de telas e adicionar telas
+        self.gerenciador_de_telass = ScreenManager()
+        self.gerenciador_de_telass.add_widget(TelaMenu(name='menu'))
+        self.gerenciador_de_telass.add_widget(TelaJogo(name='jogo'))
+        self.gerenciador_de_telass.add_widget(TelaPausa(name='pausa'))
+
+        return self.gerenciador_de_telass
+
+class TelaMenu(Screen):
+    def __init__(self, **kwargs):
+        super(TelaMenu, self).__init__(**kwargs)
+        self.add_widget(Label(text='Saga do Ronin'))
+        self.add_widget(Button(text='Jogar', on_press=self.iniciar_jogo))
+        self.add_widget(Button(text='Entrar com Google', on_press=self.entrar_com_google))
+
+    def iniciar_jogo(self, instance):
+        # Mudar para tela de jogo
+        self.gerenciador_de_telass.current = 'jogo'
+
+    def entrar_com_google(self, instance):
+        # Autenticar com Serviços do Google Play
+        self.motor_de_jogo.entrar_com_google()
+
+class TelaJogo(Screen):
+    def __init__(self, **kwargs):
+        super(TelaJogo, self).__init__(**kwargs)
+        self.add_widget(Label(text='Tela de Jogo'))
+        self.add_widget(Joystick())  # Adicionar o joystick
+        self.add_widget(Button(text='Chute', on_press=self.chutar))
+        self.add_widget(Button(text='Espada', on_press=self.golpe_espada))
+        self.add_widget(Button(text='Ataque Combo', on_press=self.ataque_combo))
+        self.add_widget(Button(text='Ataque Especial', on_press=self.ataque_especial))
+        self.add_widget(Button(text='Pausar', on_press=self.pausar_jogo))
+
+    def chutar(self, instance):
+        # Lógica para o chute
+        # ...
+
+    def golpe_espada(self, instance):
+        # Lógica para o golpe de espada
+        # ...
+
+    def ataque_combo(self, instance):
+        # Lógica para o ataque combo
+        # ...
+
+    def ataque_especial(self, instance):
+        # Lógica para o ataque especial do dragão
+        # ...
+
+    def pausar_jogo(self, instance):
+        # Mudar para tela de pausa
+        self.gerenciador_de_telass.current = 'pausa'
+
+class TelaPausa(Screen):
+    def __init__(self, **kwargs):
+        super(TelaPausa, self).__init__(**kwargs)
+        self.add_widget(Label(text='Tela de Pausa'))
+        self.add_widget(Button(text='Retomar', on_press=self.retomar_jogo))
+        self.add_widget(Button(text='Sair', on_press=self.sair_do_jogo))
+
+    def retomar_jogo(self, instance):
+        # Mudar de volta para tela de jogo
+        self.gerenciador_de_telass.current = 'jogo'
+
+    def sair_do_jogo(self, instance):
+        # Sair do jogo
+        self.motor_de_jogo.sair_do_jogo()
+
+class MotorDeJogo:
+    def __init__(self):
+        # Inicializar motor de jogo e carregar assets
+        self.personagem_jogador = PersonagemJogador()
+        self.inimigos = []
+        self.fases = range(1, 50)  # 49 fases
+        self.status_entrada_google = False
+
+    def entrar_com_google(self):
+        # Autenticar com Serviços do Google Play
+        # ...
+        self.status_entrada_google = True
+
+    def atualizar(self, dt):
+        # Atualizar lógica de jogo e lidar com entrada do usuário
+        # ...
+
+    def renderizar(self):
+        # Renderizar gráficos e atualizar tela
+        # ...
+
+class PersonagemJogador:
+    # Defina a classe do guerreiro
